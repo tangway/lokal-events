@@ -9,34 +9,39 @@ module.exports = {
         type: Sequelize.INTEGER
       },
 
-      user: {
-        type: Sequelize.STRING
-      },
       title: {
         type: Sequelize.STRING
       },
+
       date: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING, validate: {isDate: {msg: 'Invalid date'}}
       },
+
       venue: {
         type: Sequelize.STRING
       },
+
       time: {
         type: Sequelize.STRING
       },
+
       type: {
         type: Sequelize.STRING
       },
+
       description: {
         type: Sequelize.TEXT
       },
+
       imageurl: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING, validate: {isUrl: {msg: 'Invalid URL'}}
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
+
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE

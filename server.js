@@ -5,11 +5,11 @@ var Sequelize  = require('sequelize');
 var fs         = require('fs');
 var bcrypt     = require('bcryptjs');
 var session    = require('express-session');
-// var passport   = require('./config/ppConfig.js');
+var passport   = require('./config/ppConfig.js');
 var flash      = require('connect-flash');
 var db         = require("./models");
 var app        = express()
-// var isLoggedIn = require('./middleware/isLoggedIn');
+var isLoggedIn = require('./middleware/isLoggedIn.js');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -19,7 +19,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 app.get('/', function(req, res) {
   var events = fs.readFileSync('data.json');
@@ -27,6 +29,10 @@ app.get('/', function(req, res) {
   res.render('index', {theEvents: events});
 });
 
+app.get('/profile', isLoggedIn, function(req, res) {
+  res.render('profile');
+});
 
+app.use('/auth', require('./controllers/auth.js'));
 
 app.listen(3000);
