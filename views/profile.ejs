@@ -1,1 +1,13 @@
-<h1>test</h1>
+<h1>Your Posts</h1>
+list all events instead
+<% events.forEach(function(event) { %>
+<%= event.date %>
+<br>
+<%= event.title %>
+<br>
+<br>
+<%= event.description %>
+<br>
+<br>
+<br>
+<% }); %>

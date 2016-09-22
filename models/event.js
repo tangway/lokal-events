@@ -7,14 +7,16 @@ module.exports = function(sequelize, DataTypes) {
     venue: DataTypes.STRING,
     time: DataTypes.STRING,
     type: DataTypes.STRING,
-    description: DataTypes.STRING,
-    imageurl: DataTypes.STRING
+    description: DataTypes.TEXT,
+    imageurl: DataTypes.STRING,
+    userID:DataTypes.STRING
   },
 
   {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+         models.event.belongsTo(models.user, {foreignKey:"userID"})
+
       }
     }
   });

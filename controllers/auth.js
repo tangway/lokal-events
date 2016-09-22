@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../models');
+var isLoggedIn = require('../middleware/isLoggedIn.js');
+var loggedInAlready = require('../middleware/loggedInAlready.js');
+var loggedInAlready2 = require('../middleware/loggedInAlready2.js');
 var passport = require('../config/ppConfig');
 
 
-router.get('/signup', function(req, res) {
+router.get('/signup', loggedInAlready, function(req, res) {
   res.render('auth/signup');
 });
 
@@ -40,12 +43,14 @@ router.post('/signup', function(req, res) {
 //
 // });
 
-router.get('/login', function(req, res) {
+router.get('/login', loggedInAlready2, function(req, res) {
   res.render('auth/login');
 });
 
+
+
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
+  successRedirect: '../loggedIn',
   failureRedirect: '/auth/login',
   failureFlash: 'Invalid username and/or password',
   successFlash: 'You have logged in'

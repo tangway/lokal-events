@@ -19,18 +19,38 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-app.get('/', function(req, res) {
-  var events = fs.readFileSync('data.json');
-  events = JSON.parse(events);
-  res.render('index', {theEvents: events});
+app.use(function(req, res, next) {
+  // before every route, attach the flash messages and current user to res.locals
+  res.locals.alerts = req.flash();
+  res.locals.currentUser = req.user;
+  next();
 });
 
+app.get('/', function(req, res) {
+  db.event.findAll().then(function(data) {
+    res.render('index' , {data: data})
+  });
+});
+
+app.get('/loggedIn', function(req, res) {
+  res.redirect('/profile');
+});
+
+
 app.get('/profile', isLoggedIn, function(req, res) {
-  res.render('profile');
+  db.event.findAll({
+    where:{
+      userID: req.user.email
+    }
+}).then(function(events){
+  res.render('profile', {events: events}
+  )});
+
 });
 
 app.use('/auth', require('./controllers/auth.js'));

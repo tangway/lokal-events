@@ -4,7 +4,11 @@ var bcrypt = require('bcryptjs');
 module.exports = function(sequelize, DataTypes) {
   var user = sequelize.define('user', {
 
-    user: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      validate: {isEmail: true}
+    },
+
     password: DataTypes.STRING,
 
   }, {
@@ -21,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
 
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        models.user.hasMany(models.event, {foreignKey:"userID"});
       },
     },
     instanceMethods: {

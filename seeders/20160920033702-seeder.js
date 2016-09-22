@@ -4,8 +4,7 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('events', [{
 
-      "id": "1",
-      "user": "admin",
+
       "title": "Darker Than Wax at Art After Dark",
       "date": "23/9/2016",
       "venue": "Red Baron - Gillman Barracks, Blk 45 Malan Road, Singapore 109455",
@@ -18,8 +17,7 @@ module.exports = {
     },
 
     {
-      "id": "2",
-      "user": "admin",
+
       "title": "ArchiFest: Books x Beer",
       "date": "24/9/2016",
       "venue": "Archifest Pavilion@Raffles Place Park",
@@ -33,8 +31,6 @@ module.exports = {
     },
 
     {
-      "id": "3",
-      "user": "admin",
       "title": "BLOW Canvas' 2nd Anniversary: Detroit Techno Militia",
       "date": "24/9/2016",
       "venue": "Canvas Club, Singapore 058416",
@@ -47,8 +43,6 @@ module.exports = {
     },
 
     {
-      "id": "4",
-      "user": "admin",
       "title": "DJ Craze Live At Cherry Discotheque",
       "date": "24/9/2016",
       "venue": "Cherry Discotheque, 21 Mount Elizabeth, Singapore 228516",
