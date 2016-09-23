@@ -8,12 +8,15 @@ var session    = require('express-session');
 var passport   = require('./config/ppConfig.js');
 var flash      = require('connect-flash');
 var db         = require("./models");
-var app        = express()
+var method     = require('method-override');
+var app        = express();
 var isLoggedIn = require('./middleware/isLoggedIn.js');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(method('_method'));
 
 app.set('view engine', 'ejs');
+
 app.use(session({
   secret: 'naaaa nananana nananana nanana nana naaa',
   resave: false,
@@ -33,6 +36,7 @@ app.use(function(req, res, next) {
 
 app.get('/', function(req, res) {
   db.event.findAll().then(function(data) {
+    // res.json(data)
     res.render('index' , {data: data})
   });
 });
@@ -48,11 +52,121 @@ app.get('/profile', isLoggedIn, function(req, res) {
       userID: req.user.email
     }
 }).then(function(events){
+  // console.log(events);
   res.render('profile', {events: events}
   )});
 
 });
 
+app.get('/newEvent', function(req, res) {
+  res.render('newEvent')
+  }
+)
+
+app.get('/event/:id', function(req, res) {
+  db.event.find({
+  where: {id: req.params.id }
+
+}).then(function(events) {
+   res.render('edit', {events: events} )
+  // user will be an instance of User and stores the content of the table entry with id 2. if such an entry is not defined you will get null
+
+  });
+
+ }
+)
+
+app.put('/events/:id', function(req, res) {
+  db.event.update ({
+  title: req.body.title,
+  date: req.body.date,
+  venue: req.body.venue,
+  time: req.body.time,
+  type: req.body.type,
+  description: req.body.description
+
+  }, {
+  where: {
+    id: req.params.id
+  }
+}).then(function(events) {
+  console.log(events);
+   res.redirect('/')
+  // do something when done updating
+  });
+ }
+)
+
+
+
+
+
+app.post('/newEvent', function(req, res) {
+  //debug code (output request body)
+  console.log(req.body);
+  // res.send(req.body);
+
+  db.event.create({
+  title: req.body.title,
+  date: req.body.date,
+  venue: req.body.venue,
+  time: req.body.time,
+  type: req.body.type,
+  description: req.body.description,
+  imageurl: req.body.imageurl,
+  userID: req.body.email
+
+}).then(function(events) {
+
+  db.event.findAll({
+    where:{
+      userID: req.body.email
+    }
+}).then(function(events){
+  res.redirect('profile')
+  // res.render('profile', {events: events}
+  });
+  // console.log("#Look >>>>>", events);
+  // console.log("#Look >>>>>", events.get());
+  // var getEvent = events.get()
+  // res.json(events);
+  // res.render('profile', getEvent)
+});
+});
+
+
+// app.post('/profile', function(req, res) {
+//   //debug code (output request body)
+//   // console.log(req.body);
+//   // res.send(req.body);
+//
+//   db.event.create({
+//   title: req.body.title,
+//   date: req.body.date,
+//   venue: req.body.venue,
+//   time: req.body.time,
+//   type: req.body.type,
+//   description: req.body.description,
+//   imageurl: req.body.imageurl,
+//   userID: req.body.userID
+//
+// }).then(function(events) {
+//
+//   db.event.findAll({
+//     where:{
+//       userID: req.user.userID
+//     }
+// }).then(function(events){
+//   res.render('profile', {events: events}
+//   )});
+//   // console.log("#Look >>>>>", events);
+//   // console.log("#Look >>>>>", events.get());
+//   // var getEvent = events.get()
+//   // res.json(events);
+//   // res.render('profile', getEvent)
+// });
+// });
+
 app.use('/auth', require('./controllers/auth.js'));
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000)

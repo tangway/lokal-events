@@ -1,5 +1,7 @@
 <h1>Your Posts</h1>
-list all events instead
+<a href="/newEvent">Create new event</a>
+<br>
+<br>
 <% events.forEach(function(event) { %>
 <%= event.date %>
 <br>
@@ -8,6 +10,8 @@ list all events instead
 <br>
 <%= event.description %>
 <br>
+<a href="/event/<%= event.id %>"> EDIT </a>
 <br>
 <br>
-<% }); %>
+<br>
+<% }) %>
