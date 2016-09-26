@@ -97,7 +97,14 @@ app.put('/events/:id', function(req, res) {
  }
 )
 
-
+app.delete('/events/:id', function (req, res) {
+  db.event.destroy({
+  where: { id: req.params.id }
+}).then(function() {
+  res.redirect('/profile')
+});
+ }
+)
 
 
 
@@ -169,4 +176,7 @@ app.post('/newEvent', function(req, res) {
 
 app.use('/auth', require('./controllers/auth.js'));
 
-app.listen(process.env.PORT || 3000)
+var server = app.listen(process.env.PORT || 3000, function() {
+  console.log('server running on port 3000');
+})
+module.exports = server;

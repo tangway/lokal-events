@@ -45,7 +45,6 @@
     <input id="imageurl" class="form-control" name="imageurl" value="<%= events.imageurl %>">
   </div>
 
-
-
   <input class="btn btn-primary" type="submit" name="action">
+  <button type="submit" name="delete" formaction="/events/<%= events.id %>?_method=DELETE" formmethod="post">Delete ahh</button>
 </form>
